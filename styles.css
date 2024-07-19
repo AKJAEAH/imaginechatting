@@ -78,3 +78,39 @@ button:hover {
     align-self: flex-end;
     max-width: 70%;
 }
+
+.group-chat {
+    background-color: green;
+    color: blue;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.user {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.user.online {
+    color: green;
+}
+
+.user.offline {
+    color: red;
+}
+
+.my-message {
+    text-align: right;
+    color: blue;
+}
+
+.other-message {
+    text-align: left;
+    color: black;
+}
+
+.group-message {
+    color: green;
+}
