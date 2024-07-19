@@ -17,11 +17,23 @@ var firebaseConfig = {
   let currentUser = null;
   let currentUsername = null;
   
+  // Switch to Sign In form
+  document.getElementById('showSignIn').addEventListener('click', function() {
+	document.getElementById('sign-up-form').style.display = 'none';
+	document.getElementById('sign-in-form').style.display = 'block';
+  });
+  
+  // Switch to Sign Up form
+  document.getElementById('showSignUp').addEventListener('click', function() {
+	document.getElementById('sign-in-form').style.display = 'none';
+	document.getElementById('sign-up-form').style.display = 'block';
+  });
+  
   // Sign Up
   document.getElementById('signUp').addEventListener('click', function() {
-	const username = document.getElementById('username').value;
-	const email = document.getElementById('email').value;
-	const password = document.getElementById('password').value;
+	const username = document.getElementById('signUpUsername').value;
+	const email = document.getElementById('signUpEmail').value;
+	const password = document.getElementById('signUpPassword').value;
 	auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
 	  return db.ref('users/' + userCredential.user.uid).set({
 		username: username,
@@ -34,8 +46,8 @@ var firebaseConfig = {
   
   // Sign In
   document.getElementById('signIn').addEventListener('click', function() {
-	const email = document.getElementById('email').value;
-	const password = document.getElementById('password').value;
+	const email = document.getElementById('signInEmail').value;
+	const password = document.getElementById('signInPassword').value;
 	auth.signInWithEmailAndPassword(email, password).catch(function(error) {
 	  console.error(error.message);
 	});
