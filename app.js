@@ -102,23 +102,37 @@ var firebaseConfig = {
   function loadUserList() {
 	const userListDiv = document.getElementById('user-list');
 	userListDiv.innerHTML = '';
+  
+	// Add group chat element
+	const groupChatElement = document.createElement('div');
+	groupChatElement.className = 'group-chat';
+	groupChatElement.textContent = 'All of the Members';
+	groupChatElement.addEventListener('click', function() {
+	  openGroupChatRoom();
+	});
+	userListDiv.appendChild(groupChatElement);
+  
 	db.ref('users').on('value', function(snapshot) {
-	  userListDiv.innerHTML = '';
 	  snapshot.forEach(function(childSnapshot) {
 		const user = childSnapshot.val();
 		const userElement = document.createElement('div');
+		userElement.className = 'user';
 		userElement.textContent = user.username;
-		if (user.online) {
-		  userElement.innerHTML += ' <span style="color:green;">(online)</span>';
-		} else {
-		  userElement.innerHTML += ' <span style="color:red;">(offline)</span>';
-		}
+		userElement.classList.add(user.online ? 'online' : 'offline');
 		userElement.addEventListener('click', function() {
 		  openChatRoom(childSnapshot.key, user.username);
 		});
 		userListDiv.appendChild(userElement);
 	  });
 	});
+  }
+  
+  // Open Group Chat Room
+  function openGroupChatRoom() {
+	currentChatRoom = 'group_chat';
+	document.getElementById('chat-with').textContent = 'All of the Members';
+	document.getElementById('chat-room').style.display = 'block';
+	loadMessages(true); // true indicates group chat
   }
   
   // Open Chat Room
@@ -145,13 +159,11 @@ var firebaseConfig = {
 	  createdAt: firebase.database.ServerValue.TIMESTAMP
 	}).then(function() {
 	  document.getElementById('message').value = '';
-	}).catch(function(error) {
-	  console.error(error.message);
 	});
   });
   
   // Load Messages
-  function loadMessages() {
+  function loadMessages(isGroupChat = false) {
 	const messagesDiv = document.getElementById('messages');
 	db.ref('messages/' + currentChatRoom).orderByChild('createdAt').on('value', function(snapshot) {
 	  messagesDiv.innerHTML = '';
@@ -165,6 +177,11 @@ var firebaseConfig = {
 		  messageElement.classList.add('my-message');
 		} else {
 		  messageElement.classList.add('other-message');
+		}
+  
+		// Add group message class if it's a group chat
+		if (isGroupChat) {
+		  messageElement.classList.add('group-message');
 		}
   
 		messagesDiv.appendChild(messageElement);
