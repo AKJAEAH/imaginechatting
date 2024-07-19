@@ -113,16 +113,23 @@ var firebaseConfig = {
 	userListDiv.appendChild(groupChatElement);
   
 	db.ref('users').on('value', function(snapshot) {
+	  userListDiv.innerHTML = ''; // Clear the list before adding new elements
+  
+	  // Add group chat element again
+	  userListDiv.appendChild(groupChatElement);
+  
 	  snapshot.forEach(function(childSnapshot) {
 		const user = childSnapshot.val();
-		const userElement = document.createElement('div');
-		userElement.className = 'user';
-		userElement.textContent = user.username;
-		userElement.classList.add(user.online ? 'online' : 'offline');
-		userElement.addEventListener('click', function() {
-		  openChatRoom(childSnapshot.key, user.username);
-		});
-		userListDiv.appendChild(userElement);
+		if (user.email !== currentUser.email) { // Do not show the current user in the list
+		  const userElement = document.createElement('div');
+		  userElement.className = 'user';
+		  userElement.textContent = user.username;
+		  userElement.classList.add(user.online ? 'online' : 'offline');
+		  userElement.addEventListener('click', function() {
+			openChatRoom(childSnapshot.key, user.username);
+		  });
+		  userListDiv.appendChild(userElement);
+		}
 	  });
 	});
   }
