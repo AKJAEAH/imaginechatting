@@ -17,6 +17,20 @@ var firebaseConfig = {
   let currentUser = null;
   let currentUsername = null;
   
+  // Switch to Sign In form
+  document.getElementById('showSignIn').addEventListener('click', function(event) {
+	event.preventDefault();
+	document.getElementById('sign-up-form').style.display = 'none';
+	document.getElementById('sign-in-form').style.display = 'block';
+  });
+  
+  // Switch to Sign Up form
+  document.getElementById('showSignUp').addEventListener('click', function(event) {
+	event.preventDefault();
+	document.getElementById('sign-in-form').style.display = 'none';
+	document.getElementById('sign-up-form').style.display = 'block';
+  });
+  
   // Sign Up
   document.getElementById('signUp').addEventListener('click', function() {
 	const username = document.getElementById('signUpUsername').value;
@@ -88,7 +102,8 @@ var firebaseConfig = {
   function loadUserList() {
 	const userListDiv = document.getElementById('user-list');
 	userListDiv.innerHTML = '';
-	db.ref('users').once('value', function(snapshot) {
+	db.ref('users').on('value', function(snapshot) {
+	  userListDiv.innerHTML = '';
 	  snapshot.forEach(function(childSnapshot) {
 		const user = childSnapshot.val();
 		const userElement = document.createElement('div');
