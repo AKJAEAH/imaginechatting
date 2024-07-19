@@ -17,18 +17,6 @@ var firebaseConfig = {
   let currentUser = null;
   let currentUsername = null;
   
-  // Switch to Sign In form
-  document.getElementById('showSignIn').addEventListener('click', function() {
-	document.getElementById('sign-up-form').style.display = 'none';
-	document.getElementById('sign-in-form').style.display = 'block';
-  });
-  
-  // Switch to Sign Up form
-  document.getElementById('showSignUp').addEventListener('click', function() {
-	document.getElementById('sign-in-form').style.display = 'none';
-	document.getElementById('sign-up-form').style.display = 'block';
-  });
-  
   // Sign Up
   document.getElementById('signUp').addEventListener('click', function() {
 	const username = document.getElementById('signUpUsername').value;
@@ -37,7 +25,8 @@ var firebaseConfig = {
 	auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
 	  return db.ref('users/' + userCredential.user.uid).set({
 		username: username,
-		email: email
+		email: email,
+		online: true
 	  });
 	}).catch(function(error) {
 	  console.error(error.message);
@@ -55,6 +44,9 @@ var firebaseConfig = {
   
   // Sign Out
   document.getElementById('signOut').addEventListener('click', function() {
+	if (currentUser) {
+	  db.ref('users/' + currentUser.uid).update({ online: false });
+	}
 	auth.signOut();
   });
   
@@ -68,6 +60,7 @@ var firebaseConfig = {
 	  db.ref('users/' + user.uid).once('value').then(snapshot => {
 		currentUsername = snapshot.val().username;
 		loadUserList();
+		trackUserPresence(user.uid);
 	  });
 	} else {
 	  document.getElementById('auth').style.display = 'block';
@@ -78,6 +71,19 @@ var firebaseConfig = {
 	}
   });
   
+  // Track User Presence
+  function trackUserPresence(userId) {
+	const userRef = db.ref('users/' + userId);
+	const presenceRef = db.ref('.info/connected');
+  
+	presenceRef.on('value', (snapshot) => {
+	  if (snapshot.val() === true) {
+		userRef.onDisconnect().update({ online: false });
+		userRef.update({ online: true });
+	  }
+	});
+  }
+  
   // Load User List
   function loadUserList() {
 	const userListDiv = document.getElementById('user-list');
@@ -87,6 +93,11 @@ var firebaseConfig = {
 		const user = childSnapshot.val();
 		const userElement = document.createElement('div');
 		userElement.textContent = user.username;
+		if (user.online) {
+		  userElement.innerHTML += ' <span style="color:green;">(online)</span>';
+		} else {
+		  userElement.innerHTML += ' <span style="color:red;">(offline)</span>';
+		}
 		userElement.addEventListener('click', function() {
 		  openChatRoom(childSnapshot.key, user.username);
 		});
