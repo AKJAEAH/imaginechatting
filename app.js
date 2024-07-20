@@ -16,6 +16,8 @@ var firebaseConfig = {
   let currentChatRoom = null;
   let currentUser = null;
   let currentUsername = null;
+
+  const MESSAGE_CHAR_LIMIT = 250;
   
   // Switch to Sign In form
   document.getElementById('showSignIn').addEventListener('click', function(event) {
@@ -158,16 +160,29 @@ var firebaseConfig = {
   
   // Send Message
   document.getElementById('send').addEventListener('click', function() {
-	const message = document.getElementById('message').value;
-	db.ref('messages/' + currentChatRoom).push({
-	  uid: currentUser.uid,
-	  username: currentUsername,
-	  message,
-	  createdAt: firebase.database.ServerValue.TIMESTAMP
-	}).then(function() {
-	  document.getElementById('message').value = '';
-	});
-  });
+    const message = document.getElementById('message').value;
+    console.log('Message:', message); // Debugging: Check if message value is correct
+    if (message.length > MESSAGE_CHAR_LIMIT) {
+        alert(`Message is too long. Maximum length is ${MESSAGE_CHAR_LIMIT} characters.`);
+        return;
+    }
+	if (message.length < 1) {
+        alert(`Message is too short. Minimum length is 1 characters.`);
+        return;
+    }
+    db.ref('messages/' + currentChatRoom).push({
+        uid: currentUser.uid,
+        username: currentUsername,
+        message,
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+    }).then(function() {
+        document.getElementById('message').value = '';
+    }).catch(function(error) {
+        console.error('Error sending message:', error.message); // Debugging: Check if there are any errors in sending the message
+    });
+});
+
+
   
   // Load Messages
   function loadMessages(isGroupChat = false) {
