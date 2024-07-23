@@ -3,6 +3,8 @@
 <head>
     <title>Chat App</title>
     <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body>
     <div id="auth">
@@ -23,16 +25,20 @@
         </div>
     </div>
     <div id="chat" style="display:none;">
+        <div id="menu">
+            <button id="signOut"><ion-icon name="log-out-outline"></ion-icon></button>
+        </div>
         <div id="user-list">
             <div id="group-chat" class="group-chat">All of the Members</div>
         </div>
         <div id="chat-room">
             <h2 id="chat-with"></h2>
             <div id="messages"></div>
-            <input type="text" id="message" placeholder="Type a message">
-            <button id="send">Send</button>
+            <div id="message-input">
+                <input type="text" id="message" placeholder="Type a message">
+                <button id="send"><ion-icon name="send-outline"></ion-icon></button>
+            </div>
         </div>
-        <button id="signOut">Sign Out</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
