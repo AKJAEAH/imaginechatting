@@ -1,62 +1,135 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden;
 }
 
 #auth, #chat {
-    width: 300px;
-    margin: 20px;
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 
-input {
+#auth {
+    justify-content: center;
+    align-items: center;
+}
+
+#sign-up-form, #sign-in-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#sign-up-form input, #sign-in-form input, #sign-up-form button, #sign-in-form button {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
     box-sizing: border-box;
 }
 
-button {
+#chat {
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
+    height: 100%;
 }
 
-button:hover {
-    background-color: #0056b3;
+#menu {
+    width: 60px;
+    background: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
+#menu button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 #user-list {
-    margin-bottom: 10px;
+    width: 200px;
+    background: #f0f0f0;
+    overflow-y: auto;
+    padding: 10px;
 }
 
 #user-list div {
     padding: 10px;
-    background-color: #e5e5e5;
+    background-color: #fff;
     margin: 5px 0;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#user-list div:hover {
+    background-color: #e1e1e1;
 }
 
 #chat-room {
-    display: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #ecf0f1;
+    height: 100vh;
+}
+
+#chat-with {
+    margin: 0 0 10px 0;
 }
 
 #messages {
-    max-height: 300px;
+    flex: 1;
     overflow-y: auto;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
     padding: 10px;
     background-color: #fff;
+    border-radius: 5px;
+}
+
+#message-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+#message {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#message:focus {
+    border-color: #007BFF;
+}
+
+#send {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #007BFF;
+    transition: color 0.3s;
+}
+
+#send:hover {
+    color: #0056b3;
 }
 
 .my-message {
@@ -65,8 +138,9 @@ button:hover {
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
-    align-self: flex-start;
+    align-self: flex-end;
     max-width: 70%;
+    text-align: right;
 }
 
 .other-message {
@@ -75,8 +149,9 @@ button:hover {
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
-    align-self: flex-end;
+    align-self: flex-start;
     max-width: 70%;
+    text-align: left;
 }
 
 .group-chat {
@@ -84,33 +159,6 @@ button:hover {
     color: blue;
     padding: 10px;
     margin: 5px;
+    border-radius: 5px;
     cursor: pointer;
-}
-
-.user {
-    padding: 10px;
-    margin: 5px;
-    cursor: pointer;
-}
-
-.user.online {
-    color: green;
-}
-
-.user.offline {
-    color: red;
-}
-
-.my-message {
-    text-align: right;
-    color: blue;
-}
-
-.other-message {
-    text-align: left;
-    color: black;
-}
-
-.group-message {
-    color: green;
 }
